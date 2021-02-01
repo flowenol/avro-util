@@ -96,7 +96,7 @@ public final class FastSerdeTestsSupport {
     typeList.addAll(Arrays.asList(types).stream().map(Schema::create).collect(Collectors.toList()));
 
     Schema unionSchema = Schema.createUnion(typeList);
-    return new Schema.Field(name, unionSchema, null, null, Schema.Field.Order.ASCENDING);
+    return new Schema.Field(name, unionSchema, null, Schema.Field.NULL_DEFAULT_VALUE, Schema.Field.Order.ASCENDING);
   }
 
   public static Schema.Field createArrayFieldSchema(String name, Schema elementType, String... aliases) {
@@ -131,6 +131,14 @@ public final class FastSerdeTestsSupport {
     }
 
     return field;
+  }
+
+  public static Schema addAliases(Schema schema, String... aliases) {
+    if (aliases != null) {
+      Arrays.asList(aliases).forEach(schema::addAlias);
+    }
+
+    return schema;
   }
 
   public static <T extends GenericContainer> Decoder genericDataAsDecoder(T data) {
